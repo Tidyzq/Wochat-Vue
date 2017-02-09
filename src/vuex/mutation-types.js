@@ -1,0 +1,10 @@
+// user
+export const UPDATE_USER = 'UPDATE_USER'
+export const UPDATE_ACCESS_TOKEN = 'UPDATE_ACCESS_TOKEN'
+export const UPDATE_REFRESH_TOKEN = 'UPDATE_REFRESH_TOKEN'
+
+// contacts
+export const ADD_CONTACT = 'ADD_CONTACT'
+export const REMOVE_CONTACT = 'REMOVE_CONTACT'
+export const REFRESH_CONTACTS = 'REFRESH_CONTACTS'
+export const ADD_CHAT = 'ADD_CHAT_TO_CONTACT'
