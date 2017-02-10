@@ -49,14 +49,19 @@ export default {
       })
       .then(() => {
         console.log('auth success')
-        this.$store.dispatch('getContacts')
-        io.emit('receive')
+        return this.$store.dispatch('getContacts')
       })
       .then(() => {
         io.on('message', (messages) => {
           console.log(messages)
           this.$store.dispatch('addChats', messages)
+          let acks = []
+          messages.forEach((message) => {
+            acks.push(message._id)
+          })
+          io.emit('ack', acks)
         })
+        io.emit('receive')
       })
       .catch(() => {
         this.$store.dispatch('userLogout')

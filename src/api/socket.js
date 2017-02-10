@@ -59,6 +59,27 @@ export default {
       this.on('auth:fail', onFail)
     })
   },
+  message (message) {
+    return new Promise((resolve, reject) => {
+      this.emit('message', message)
+      var onSuccess, onFail
+
+      onSuccess = (msg) => {
+        this.off('message:success', onSuccess)
+        this.off('message:fail', onFail)
+        resolve(msg)
+      }
+
+      onFail = (err) => {
+        this.off('message:success', onSuccess)
+        this.off('message:fail', onFail)
+        reject(err)
+      }
+
+      this.on('message:success', onSuccess)
+      this.on('message:fail', onFail)
+    })
+  },
   close () {
     if (this.socket) {
       this.socket.close()
