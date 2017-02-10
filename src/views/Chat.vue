@@ -1,10 +1,10 @@
 <template lang='pug'>
 .chat-wrapper
   h3(v-if='contact') {{ contact.contact.username }}
-  div(v-if='contact')
-    li(v-for='chat in contact.chats') {{ chat.content }}
-  input(v-model='message' placeholder='Message')
-  button.btn.btn-success(@click='sendMsg(message)') Send
+  div(v-if='messages')
+    li(v-for='message in messages') {{ message.sender }}: {{ message.content }}
+  input(v-model='inputMsg' placeholder='Message')
+  button.btn.btn-success(@click='sendMsg(inputMsg)') Send
 </template>
 
 <script>
@@ -14,26 +14,29 @@ export default {
   name: 'chat',
   data () {
     return {
-      message: ''
+      inputMsg: ''
     }
   },
   computed: {
     id () {
       return this.$route.params.id
     },
+    contacts () {
+      return this.$store.state.contacts.contacts
+    },
     contact () {
       return this.$store.state.contacts.contacts[this.$route.params.id]
+    },
+    messages () {
+      return this.$store.state.messages.messages[this.$route.params.id]
     }
   },
   methods: {
     sendMsg (message) {
-      this.message = ''
-      io.message({
-          receiver: this.id,
-          content: message
-        })
-        .then((msg) => {
-          this.$store.dispatch('addChats', [msg])
+      this.inputMsg = ''
+      this.$store.dispatch('sendMessage', {
+          to: this.id,
+          message: message
         })
     }
   }

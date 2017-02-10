@@ -39,7 +39,7 @@ export default {
   created () {
     if (this.userState.accessToken) {
       console.log('jump to hello')
-      this.$router.push('Hello')
+      this.$router.push({name: 'Hello'})
     }
   },
   methods: {

@@ -10,5 +10,11 @@ export default {
       .then(({ body }) => {
         return body
       })
+  },
+  search (search) {
+    return Vue.http.get('http://localhost:1337/api/users/search?search=' + search)
+      .then(({ body }) => {
+        return body
+      })
   }
 }

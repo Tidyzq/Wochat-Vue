@@ -1,4 +1,5 @@
 import auth from '../../api/auth'
+import io from '../../api/socket'
 import * as types from '../mutation-types'
 
 let saveStorage = (key, data) => {
@@ -68,6 +69,27 @@ export default {
           commit(types.UPDATE_ACCESS_TOKEN, '')
           commit(types.UPDATE_REFRESH_TOKEN, '')
           throw err
+        })
+    },
+    socketConnect ({ commit, state, rootState }) {
+      return io.connect()
+        .then(() => {
+          return io.auth(state.accessToken)
+            .catch(() => {
+              return auth.refresh(state.refreshToken)
+                .then(({ accessToken, refreshToken }) => {
+                  commit(types.UPDATE_ACCESS_TOKEN, accessToken)
+                  commit(types.UPDATE_REFRESH_TOKEN, refreshToken)
+                })
+                .catch((err) => {
+                  commit(types.UPDATE_ACCESS_TOKEN, '')
+                  commit(types.UPDATE_REFRESH_TOKEN, '')
+                  throw err
+                })
+            })
+            .then(() => {
+              return io.auth(state.accessToken)
+            })
         })
     }
   }

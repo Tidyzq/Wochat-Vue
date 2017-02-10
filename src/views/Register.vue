@@ -44,8 +44,8 @@ export default {
   },
   created () {
     if (this.userState.accessToken) {
-      console.log('jump to hello')
-      this.$router.push('Hello')
+      console.log('jump to login')
+      this.$router.push({ name: 'Login' })
     }
   },
   methods: {
@@ -54,8 +54,8 @@ export default {
 
       auth.register(this.username, this.nickname, this.password)
         .then(() => {
-          console.log('jump to hello')
-          this.$router.push('Hello')
+          console.log('jump to login')
+          this.$router.push({ name: 'Login' })
         })
         .catch(() => {
           this.showAlert = true

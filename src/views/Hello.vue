@@ -1,6 +1,20 @@
 <template lang='pug'>
 .hello-wrapper
-  button(@click='logout()') logout
+  navbar(placement='top' formPlacement='right')
+    a.navbar-brand(slot='brand' href='/') Wochat
+    modal(:show='showCustomModal' v-on:toggle='showCustomModal = arguments[0]' effect='fade' width='400')
+      div.modal-header(slot='modal-header')
+        h4.modal-title Search Result
+      div.modal-body(slot='modal-body') body
+      div.modal-footer(slot='modal-footer')
+        button.btn.btn-default(type='button' @click='showCustomModal = false') Exit
+        button.btn.btn-success(type='button' @click='showCustomModal = false') Custom Save
+    div(slot='form')
+      .form-group
+        input.form-control(type='text' placeholder='Search' v-model='search')
+        button.btn.btn-default(type='submit' @click='searchUser') Submit
+    li(slot='right')
+      button.btn.btn-warning.navbar-btn(type='button' @click='logout()') Logout
   .container
     h1 User State
     li user: {{ userState.user }}
@@ -15,13 +29,15 @@
 
 <script>
 import Navbar from '../components/Navbar'
-import io from '../api/socket'
+import Modal from '../components/Modal'
+import userApi from '../api/user'
 
 export default {
   name: 'hello',
   data () {
     return {
-
+      search: '',
+      showCustomModal: false
     }
   },
   computed: {
@@ -35,33 +51,13 @@ export default {
   created () {
     if (! this.userState.accessToken) {
       console.log('jump to login')
-      return this.$router.push('login')
+      return this.$router.push({ name: 'Login'})
     }
-    io.connect()
-      .then(() => {
-        return io.auth(this.userState.accessToken)
-          .catch(() => {
-            return this.$store.dispatch('userRefresh')
-          })
-          .then(() => {
-            return io.auth(this.userState.accessToken)
-          })
-      })
+    this.$store.dispatch('socketConnect')
       .then(() => {
         console.log('auth success')
-        return this.$store.dispatch('getContacts')
-      })
-      .then(() => {
-        io.on('message', (messages) => {
-          console.log(messages)
-          this.$store.dispatch('addChats', messages)
-          let acks = []
-          messages.forEach((message) => {
-            acks.push(message._id)
-          })
-          io.emit('ack', acks)
-        })
-        io.emit('receive')
+        this.$store.dispatch('getContacts')
+        this.$store.dispatch('receiveMessages')
       })
       .catch(() => {
         this.$store.dispatch('userLogout')
@@ -69,12 +65,21 @@ export default {
       })
   },
   components: {
-    Navbar
+    Navbar,
+    Modal
   },
   methods: {
     logout () {
       this.$store.dispatch('userLogout')
       this.$router.push('login')
+    },
+    searchUser (e) {
+      e && e.preventDefault()
+      userApi.search(this.search)
+        .then((searchRst) => {
+          console.log(searchRst)
+          this.showCustomModal = true
+        })
     }
   }
 }

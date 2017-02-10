@@ -1,63 +1,59 @@
 <template lang='pug'>
 .test-wrapper
-  nav.navbar.navbar-default.navbar-fixed-top
+  nav.navbar(:class="{\
+      'navbar-inverse'     : (type == 'inverse'),\
+      'navbar-default'     : (type == 'default'),\
+      'navbar-fixed-top'   : (placement === 'top'),\
+      'navbar-fixed-bottom': (placement === 'bottom'),\
+      'navbar-static-top'  : (placement === 'static')\
+    }")
     .container-fluid
       .navbar-header
-        button.navbar-toggle.collapsed(type='button' data-toggle='collapse' data-target='#bs-example-navbar-collapse-1' aria-expanded='false')
+        button.navbar-toggle.collapsed(type='button' aria-expanded='false' @click='toggleCollapse')
           span.sr-only Toggle navigation
           span.icon-bar
           span.icon-bar
           span.icon-bar
-        a.navbar-brand(href='#') Brand
-      #bs-example-navbar-collapse-1.collapse.navbar-collapse
+        slot(name='brand')
+      .collapse.navbar-collapse(:class="{in: !collapsed}")
         ul.nav.navbar-nav
-          li.active
-            a(href='#')
-              | Link
-              span.sr-only (current)
-          li
-            a(href='#') Link
-          li.dropdown
-            a.dropdown-toggle(href='#' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false')
-              | Dropdown
-              span.caret
-            ul.dropdown-menu
-              li
-                a(href='#') Action
-              li
-                a(href='#') Another action
-              li
-                a(href='#') Something else here
-              li.divider(role='separator')
-              li
-                a(href='#') Separated link
-              li.divider(role='separator')
-              li
-                a(href='#') One more separated link
-        form.navbar-form.navbar-left
-          .form-group
-            input.form-control(type='text' placeholder='Search')
-          button.btn.btn-default(type='submit') Submit
+          slot
         ul.nav.navbar-nav.navbar-right
-          li
-            a(href='#') Link
-          li.dropdown
-            a.dropdown-toggle(href='#' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false')
-              | Dropdown
-              span.caret
-            ul.dropdown-menu
-              li
-                a(href='#') Action
-              li
-                a(href='#') Another action
-              li
-                a(href='#') Something else here
-              li.divider(role='separator')
-              li
-                a(href='#') Separated link
+          slot(name='right')
+        form.navbar-form(:class="{\
+            'navbar-left': (formPlacement === 'left'),\
+            'navbar-right': (formPlacement === 'right')\
+          }")
+          slot(name='form')
 </template>
+
 <script>
 export default {
-  name: 'navbar'
+  name: 'navbar',
+  props: {
+    type: {
+      type: String,
+      default: 'default'
+    },
+    placement: {
+      type: String,
+      default: ''
+    },
+    formPlacement: {
+      type: String,
+      default: ''
+    },
+  },
+  data () {
+    return {
+      collapsed: true,
+    }
+  },
+  methods: {
+    toggleCollapse (e) {
+      e && e.preventDefault()
+      this.collapsed = !this.collapsed
+    }
+  }
 }
 </script>

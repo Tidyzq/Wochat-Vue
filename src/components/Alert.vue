@@ -1,16 +1,16 @@
 <template lang='pug'>
   .fade-transition(
-    v-bind:class="{" +
-      "'fade-leave'    : !show," +
-      "'alert'         : true," +
-      "'alert-success' : (type == 'success')," +
-      "'alert-warning' : (type == 'warning')," +
-      "'alert-info'    : (type == 'info')," +
-      "'alert-danger'  : (type == 'danger')," +
-      "'top'           : (placement === 'top')," +
-      "'top-right'     : (placement === 'top-right')," +
-      "'bottom'        : (placement === 'bottom')" +
-    "}"
+    v-bind:class="{\
+      'fade-leave'    : !show,\
+      'alert'         : true,\
+      'alert-success' : (type == 'success'),\
+      'alert-warning' : (type == 'warning'),\
+      'alert-info'    : (type == 'info'),\
+      'alert-danger'  : (type == 'danger'),\
+      'top'           : (placement === 'top'),\
+      'top-right'     : (placement === 'top-right'),\
+      'bottom'        : (placement === 'bottom')\
+    }"
     transition='fade'
     v-bind:style='{width:width}'
     role='alert')
