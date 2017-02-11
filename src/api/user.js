@@ -16,5 +16,29 @@ export default {
       .then(({ body }) => {
         return body
       })
+  },
+  sendInvitation (receiver, message, accessToken) {
+    return Vue.http.post('http://localhost:1337/api/users/' + receiver + '/invitation', {
+        message: message
+      }, {
+        headers: {
+          Authorization: 'JWT ' + accessToken
+        }
+      })
+      .then(({ body }) => {
+        return body
+      })
+  },
+  acceptInvitation (id, invitation, accessToken) {
+    return Vue.http.post('http://localhost:1337/api/users/' + id + '/invitation/accept', {
+        invitation: invitation
+      }, {
+        headers: {
+          Authorization: 'JWT ' + accessToken
+        }
+      })
+      .then(({ body }) => {
+        return body
+      })
   }
 }

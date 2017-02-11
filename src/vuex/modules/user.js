@@ -59,33 +59,23 @@ export default {
       commit(types.UPDATE_ACCESS_TOKEN, '')
       commit(types.UPDATE_REFRESH_TOKEN, '')
     },
-    userRefresh ({ commit, state }) {
+    userRefresh ({ commit, state, dispatch }) {
       return auth.refresh(state.refreshToken)
         .then(({ accessToken, refreshToken }) => {
           commit(types.UPDATE_ACCESS_TOKEN, accessToken)
           commit(types.UPDATE_REFRESH_TOKEN, refreshToken)
         })
         .catch((err) => {
-          commit(types.UPDATE_ACCESS_TOKEN, '')
-          commit(types.UPDATE_REFRESH_TOKEN, '')
+          dispatch('userLogout')
           throw err
         })
     },
-    socketConnect ({ commit, state, rootState }) {
+    socketConnect ({ commit, state, dispatch }) {
       return io.connect()
         .then(() => {
           return io.auth(state.accessToken)
             .catch(() => {
-              return auth.refresh(state.refreshToken)
-                .then(({ accessToken, refreshToken }) => {
-                  commit(types.UPDATE_ACCESS_TOKEN, accessToken)
-                  commit(types.UPDATE_REFRESH_TOKEN, refreshToken)
-                })
-                .catch((err) => {
-                  commit(types.UPDATE_ACCESS_TOKEN, '')
-                  commit(types.UPDATE_REFRESH_TOKEN, '')
-                  throw err
-                })
+              return dispatch('userRefresh')
             })
             .then(() => {
               return io.auth(state.accessToken)

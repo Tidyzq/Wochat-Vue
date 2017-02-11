@@ -29,6 +29,14 @@ export default {
         .then((contacts) => {
           commit(types.REFRESH_CONTACTS, contacts)
         })
+    },
+    getContact ({ commit, state, rootState }, id) {
+      return user.find(id, rootState.user.accessToken)
+        .then((contact) => {
+          commit(types.ADD_CONTACT, {
+            contact: contact
+          })
+        })
     }
   }
 }

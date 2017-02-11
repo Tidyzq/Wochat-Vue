@@ -1,20 +1,6 @@
 <template lang='pug'>
 .hello-wrapper
-  navbar(placement='top' formPlacement='right')
-    a.navbar-brand(slot='brand' href='/') Wochat
-    modal(:show='showCustomModal' v-on:toggle='showCustomModal = arguments[0]' effect='fade' width='400')
-      div.modal-header(slot='modal-header')
-        h4.modal-title Search Result
-      div.modal-body(slot='modal-body') body
-      div.modal-footer(slot='modal-footer')
-        button.btn.btn-default(type='button' @click='showCustomModal = false') Exit
-        button.btn.btn-success(type='button' @click='showCustomModal = false') Custom Save
-    div(slot='form')
-      .form-group
-        input.form-control(type='text' placeholder='Search' v-model='search')
-        button.btn.btn-default(type='submit' @click='searchUser') Submit
-    li(slot='right')
-      button.btn.btn-warning.navbar-btn(type='button' @click='logout()') Logout
+  wochat-navbar
   .container
     h1 User State
     li user: {{ userState.user }}
@@ -28,16 +14,16 @@
 </template>
 
 <script>
-import Navbar from '../components/Navbar'
-import Modal from '../components/Modal'
+import Vue from 'vue'
+import WochatNavbar from '../components/WochatNavbar'
 import userApi from '../api/user'
+import $ from 'jquery'
 
 export default {
   name: 'hello',
   data () {
     return {
-      search: '',
-      showCustomModal: false
+
     }
   },
   computed: {
@@ -65,22 +51,10 @@ export default {
       })
   },
   components: {
-    Navbar,
-    Modal
+    WochatNavbar
   },
   methods: {
-    logout () {
-      this.$store.dispatch('userLogout')
-      this.$router.push('login')
-    },
-    searchUser (e) {
-      e && e.preventDefault()
-      userApi.search(this.search)
-        .then((searchRst) => {
-          console.log(searchRst)
-          this.showCustomModal = true
-        })
-    }
+
   }
 }
 </script>
