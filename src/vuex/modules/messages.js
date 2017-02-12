@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import io from '../../api/socket'
+import userApi from '../../api/user'
 import * as types from '../mutation-types'
 
 const messageTypes = {
@@ -20,10 +21,22 @@ export default {
       let id = message._id
       Vue.set(state.messages[to], id, message)
     },
+    [types.CLEAR_MESSAGE] (state, id) {
+      Vue.set(state, 'messages', {})
+    },
+    [types.REMOVE_MESSAGE] (state) {
+      Vue.delete(state.messages, id)
+    },
     [types.ADD_INVITATION] (state, message) {
       let id = message._id
       Vue.set(state.invitations, id, message)
-    }
+    },
+    [types.CLEAR_INVITATION] (state, id) {
+      Vue.set(state, 'invitations', {})
+    },
+    [types.REMOVE_INVITATION] (state) {
+      Vue.delete(state.invitations, id)
+    },
   },
   actions: {
     sendMessage ({ commit, state }, { to, message }) {
@@ -66,6 +79,17 @@ export default {
         io.emit('ack', acks)
       })
       io.emit('receive')
+    },
+    sendInvitation ({ rootState }, { to, message }) {
+      return userApi.sendInvitation(to, message, rootState.user.accessToken)
+    },
+    acceptInvitation ({ commit, state, rootState }, id) {
+      let invitation = state.invitations[id] || {}
+      return userApi.acceptInvitation(rootState.user.user._id, invitation.content, rootState.user.accessToken)
+        .then((body) => {
+          commit(types.REMOVE_INVITATION, id)
+          return body
+        })
     }
   }
 }

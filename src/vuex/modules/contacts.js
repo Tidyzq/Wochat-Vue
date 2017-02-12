@@ -12,6 +12,9 @@ export default {
       let id = contact.contact._id
       Vue.set(state.contacts, id, contact)
     },
+    [types.CLEAR_CONTACT] (state) {
+      Vue.set(state, 'contacts', {})
+    },
     [types.REMOVE_CONTACT] (state, contact) {
       let id = contact.contact._id
       Vue.delete(state.contacts, id)

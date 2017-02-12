@@ -1,7 +1,7 @@
 <template lang='pug'>
 .hello-wrapper
   wochat-navbar
-  .container
+  .hello-container.container
     h1 User State
     li user: {{ userState.user }}
     li accessToken: {{ userState.accessToken }}
@@ -58,3 +58,8 @@ export default {
   }
 }
 </script>
+<style>
+.hello-container {
+  margin-top: 50px
+}
+</style>

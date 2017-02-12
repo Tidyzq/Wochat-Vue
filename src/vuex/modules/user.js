@@ -58,6 +58,9 @@ export default {
     userLogout ({ commit, state }) {
       commit(types.UPDATE_ACCESS_TOKEN, '')
       commit(types.UPDATE_REFRESH_TOKEN, '')
+      commit(types.CLEAR_CONTACT)
+      commit(types.CLEAR_INVITATION)
+      commit(types.CLEAR_MESSAGE)
     },
     userRefresh ({ commit, state, dispatch }) {
       return auth.refresh(state.refreshToken)

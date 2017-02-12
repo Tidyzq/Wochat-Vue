@@ -20,11 +20,6 @@
           slot
         ul.nav.navbar-nav.navbar-right
           slot(name='right')
-        form.navbar-form(:class="{\
-            'navbar-left': (formPlacement === 'left'),\
-            'navbar-right': (formPlacement === 'right')\
-          }")
-          slot(name='form')
 </template>
 
 <script>
@@ -38,11 +33,7 @@ export default {
     placement: {
       type: String,
       default: ''
-    },
-    formPlacement: {
-      type: String,
-      default: ''
-    },
+    }
   },
   data () {
     return {
