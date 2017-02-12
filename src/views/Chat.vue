@@ -1,17 +1,20 @@
 <template lang='pug'>
-.chat-wrapper
-  h3(v-if='contact') {{ contact.contact.username }}
-  div(v-if='messages')
-    li(v-for='message in messages') {{ message.sender }}: {{ message.content }}
-  input(v-model='inputMsg' placeholder='Message')
-  button.btn.btn-success(@click='sendMsg(inputMsg)') Send
+  sidebar.chat-wrapper(placement='right')
+    h3(v-if='contact') {{ contact.contact.username }}
+    div(v-if='messages')
+      li(v-for='message in messages') {{ message.sender }}: {{ message.content }}
+    input(v-model='inputMsg' placeholder='Message')
+    button.btn.btn-success(@click='sendMsg(inputMsg)') Send
 </template>
 
 <script>
-import io from '../api/socket'
+import Sidebar from '../components/Sidebar'
 
 export default {
   name: 'chat',
+  components: {
+    Sidebar
+  },
   data () {
     return {
       inputMsg: ''
@@ -42,3 +45,8 @@ export default {
   }
 }
 </script>
+<style>
+.chat-wrapper {
+  padding: 0 !important;
+}
+</style>

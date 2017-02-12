@@ -1,5 +1,4 @@
 <template lang='pug'>
-.test-wrapper
   nav.navbar(:class="{\
       'navbar-inverse'     : (type == 'inverse'),\
       'navbar-default'     : (type == 'default'),\
@@ -48,3 +47,8 @@ export default {
   }
 }
 </script>
+<style>
+.navbar {
+  margin: 0;
+}
+</style>

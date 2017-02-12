@@ -1,23 +1,14 @@
 <template lang='pug'>
 .hello-wrapper
   wochat-navbar
-  .hello-container.container
-    h1 User State
-    li user: {{ userState.user }}
-    li accessToken: {{ userState.accessToken }}
-    li refreshToken: {{ userState.refreshToken }}
-    h1 Contacts
-    li(v-for='(contact, id) in contacts')
-      router-link(:to='{ name: "Chat", params: { id: id }}') {{ contact.contact.username }}
-    h1 Chat
-    router-view
+  .hello-container
+    contact-list.col-sm-4
+    router-view.col-sm-8
 </template>
 
 <script>
-import Vue from 'vue'
 import WochatNavbar from '../components/WochatNavbar'
-import userApi from '../api/user'
-import $ from 'jquery'
+import ContactList from '../components/ContactList'
 
 export default {
   name: 'hello',
@@ -29,9 +20,6 @@ export default {
   computed: {
     userState () {
       return this.$store.state.user
-    },
-    contacts () {
-      return this.$store.state.contacts.contacts
     }
   },
   created () {
@@ -51,15 +39,25 @@ export default {
       })
   },
   components: {
-    WochatNavbar
+    WochatNavbar,
+    ContactList
   },
-  methods: {
-
-  }
 }
 </script>
 <style>
+.hello-wrapper {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  padding-top: 50px;
+  overflow: auto;
+}
 .hello-container {
-  margin-top: 50px
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
 }
 </style>
