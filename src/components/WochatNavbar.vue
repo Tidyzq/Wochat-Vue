@@ -1,20 +1,26 @@
 <template lang='pug'>
   .wochat-navbar-wrapper
-    navbar(placement='top' formPlacement='right')
+    send-invitation-modal(:show='showSendInvitationModal', :userList='searchRst', v-on:toggle='showSendInvitationModal = arguments[0]')
+    accept-invitation-modal(:show='showAcceptInvitationModal', v-on:toggle='showAcceptInvitationModal = arguments[0]')
+    navbar(placement='top')
       a.navbar-brand(slot='brand' href='/') Wochat
-      send-invitation-modal(:show='showSendInvitationModal', :userList='searchRst', v-on:toggle='showSendInvitationModal = arguments[0]')
-      accept-invitation-modal(:show='showAcceptInvitationModal', v-on:toggle='showAcceptInvitationModal = arguments[0]')
-      li
-        a(href="#" role="button" aria-haspopup="true" aria-expanded="false" @click.prevent='showAcceptInvitationModal = true')
-          | Invitation
-          span.label.label-danger(v-show='numberOfInvitations != 0') {{ numberOfInvitations }}
-      li(slot='right')
-        .navbar-form
-          .form-group
-            input.form-control(type='text' placeholder='Search' v-model='search')
-            button.btn.btn-default(type='submit' @click.prevent='searchUser(search)') Submit
-      li(slot='right')
-        button.btn.btn-warning.navbar-btn(type='button' @click='logout()') Logout
+      ul.nav.navbar-nav
+        li
+          a(href="#" role="button" aria-haspopup="true" aria-expanded="false" @click.prevent='showAcceptInvitationModal = true')
+            | Invitation
+            span.label.label-danger(v-show='numberOfInvitations != 0') {{ numberOfInvitations }}
+      .navbar-form.navbar-left
+        .form-group
+          input.form-control(type='text' placeholder='Search' v-model='search')
+          button.btn.btn-default(type='submit' @click.prevent='searchUser(search)') Submit
+      ul.nav.navbar-nav.navbar-right
+        li.dropdown
+          a.dropdown-toggle(href='#' data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false") {{ userState.user.username }}
+            span.caret
+          ul.dropdown-menu
+            li
+              a(href='#' @click.prevent='') Config
+              a(href='#' @click.prevent='logout()') Logout
 </template>
 
 <script>
@@ -68,10 +74,7 @@ export default {
 <style lang='less'>
 
 .wochat-navbar-wrapper {
-  position: absolute;
-  .navbar {
-    margin: 0;
-  }
+
 }
 
 </style>

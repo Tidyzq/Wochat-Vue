@@ -3,7 +3,11 @@
     .list-group
       div(v-for='(contact, id) in contacts')
         router-link.contact-item.list-group-item(:class='{ active: $route.params && $route.params.id == id }', :to='{ name: "Chat", params: { id: id }}')
-          h5 {{ contact.contact.username }}
+          .row
+            .col-xs-2.col-sm-4.col-lg-2
+              img.avatar-sm(:src='contact.contact.avatar')
+            .col-xs-2.col-sm-4.col-lg-2.no-padding
+              h5.contact-name {{ contact.contact.username }}
 </template>
 
 <script>
@@ -33,6 +37,9 @@ export default {
     &:first-child, &:last-child {
       border-radius: 0;
     }
+  }
+  .contact-name {
+    margin-top: 0;
   }
 }
 

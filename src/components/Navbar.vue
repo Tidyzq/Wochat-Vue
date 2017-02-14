@@ -6,7 +6,7 @@
       'navbar-fixed-bottom': (placement === 'bottom'),\
       'navbar-static-top'  : (placement === 'static')\
     }")
-    .container-fluid
+    .container
       .navbar-header
         button.navbar-toggle.collapsed(type='button' aria-expanded='false' @click='toggleCollapse')
           span.sr-only Toggle navigation
@@ -15,10 +15,7 @@
           span.icon-bar
         slot(name='brand')
       .collapse.navbar-collapse(:class="{in: !collapsed}")
-        ul.nav.navbar-nav
-          slot
-        ul.nav.navbar-nav.navbar-right
-          slot(name='right')
+        slot
 </template>
 
 <script>

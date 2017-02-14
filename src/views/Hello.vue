@@ -44,7 +44,8 @@ export default {
   },
 }
 </script>
-<style>
+<style lang='less'>
+
 .hello-wrapper {
   position: absolute;
   height: 100%;
@@ -53,11 +54,18 @@ export default {
   left: 0;
   padding-top: 50px;
   overflow: auto;
+  .hello-container {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+  }
 }
-.hello-container {
-  position: relative;
-  height: 100%;
-  width: 100%;
-  overflow: auto;
+
+.avatar-sm {
+  height: 40px;
+  width: 40px;
+  border-radius: 4px;
 }
+
 </style>
