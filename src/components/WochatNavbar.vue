@@ -2,7 +2,7 @@
   .wochat-navbar-wrapper
     send-invitation-modal(:show='showSendInvitationModal', :userList='searchRst', v-on:toggle='showSendInvitationModal = arguments[0]')
     accept-invitation-modal(:show='showAcceptInvitationModal', v-on:toggle='showAcceptInvitationModal = arguments[0]')
-    navbar(placement='top')
+    navbar(placement='static')
       a.navbar-brand(slot='brand' href='/') Wochat
       ul.nav.navbar-nav
         li
@@ -74,7 +74,7 @@ export default {
 <style lang='less'>
 
 .wochat-navbar-wrapper {
-
+  position: relative;
 }
 
 </style>

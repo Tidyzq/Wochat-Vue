@@ -40,9 +40,5 @@ export default {
 .sidebar:focus {
   outline: 0
 }
-@media (max-width: 991px) {
-  .sidebar {
-    min-width:240px
-  }
-}
+
 </style>

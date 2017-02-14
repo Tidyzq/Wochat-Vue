@@ -2,8 +2,8 @@
 .hello-wrapper
   wochat-navbar
   .hello-container
-    contact-list.col-sm-4
-    router-view.col-sm-8
+    contact-list.col-xs-4.col-sm-4
+    router-view.col-xs-8.col-sm-8
 </template>
 
 <script>
@@ -42,23 +42,34 @@ export default {
     WochatNavbar,
     ContactList
   },
+  beforeDestroy () {
+    console.log('before destroy')
+      alert("This message was triggered from the onunload event")
+  }
 }
 </script>
 <style lang='less'>
+
+@hello-min-width: 769px;
+@hello-min-height: 385px;
+@navbar-height: 50px;
 
 .hello-wrapper {
   position: absolute;
   height: 100%;
   width: 100%;
+  min-width: @hello-min-width;
+  min-height: @hello-min-height;
   top: 0;
   left: 0;
-  padding-top: 50px;
   overflow: auto;
   .hello-container {
-    position: relative;
-    height: 100%;
-    width: 100%;
-    overflow: auto;
+    position: absolute;
+    top: @navbar-height;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
   }
 }
 
