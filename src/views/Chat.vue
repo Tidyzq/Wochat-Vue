@@ -1,15 +1,20 @@
 <template lang='pug'>
   sidebar.chat-wrapper.no-padding(placement='right')
     h3(v-if='contact') {{ contact.contact.username }}
-    .chats-wrapper(v-if='messages')
+    .chats-wrapper
       .chats-container.container-fluid
-        .row.chat-row(v-for='message in messages')
-          .col-xs-1.col-sm-1(:class='{"pull-right": isSenderSelf(message)}')
-            img.avatar-sm(:src='contacts[message.sender].contact.avatar')
-          .col-xs-7.col-sm-7(:class='{"pull-right": isSenderSelf(message)}')
-            chatbox(:type='isSenderSelf(message) ? "success" : "info"',
-              :placement='isSenderSelf(message) ? "left" : "right"')
-              | {{ message.content }}
+        div(v-if='messages')
+          .chat-row(v-for='(message, index) in arrayMessages')
+            .row(v-if='index == 0 || diffMinutes(message.time, arrayMessages[index-1].time) >= 2')
+              .col-xs-12.col-sm-12
+                timetag(:time='message.time')
+            .row
+              .col-xs-1.col-sm-1(:class='{"pull-right": isSenderSelf(message)}')
+                img.avatar-sm(:src='contacts[message.sender].contact.avatar')
+              .col-xs-7.col-sm-7(:class='{"pull-right": isSenderSelf(message)}')
+                chatbox(:type='isSenderSelf(message) ? "success" : "info"',
+                  :placement='isSenderSelf(message) ? "left" : "right"')
+                  | {{ message.content }}
     .fixd-bottom
       .col-sm-12.no-padding
         textarea.form-control.no-radius(type='text' rows='3' v-model='inputMsg'
@@ -19,12 +24,15 @@
 <script>
 import Sidebar from '../components/Sidebar'
 import Chatbox from '../components/Chatbox'
+import Timetag from '../components/Timetag'
+import Moment from 'moment'
 
 export default {
   name: 'chat',
   components: {
     Sidebar,
-    Chatbox
+    Chatbox,
+    Timetag
   },
   data () {
     return {
@@ -46,6 +54,12 @@ export default {
     },
     messages () {
       return this.$store.state.messages.messages[this.$route.params.id]
+    },
+    arrayMessages () {
+      return Object.values(this.$store.state.messages.messages[this.$route.params.id])
+    },
+    chatContainer () {
+      return this.$el.querySelector('.chats-container')
     }
   },
   methods: {
@@ -61,6 +75,9 @@ export default {
               to: this.id,
               message: message
             })
+            .then(() => {
+              this.scrollToBottom()
+            })
         }
       } else {
         // 若 ctrl 按下，则在信息后加入换行
@@ -69,7 +86,22 @@ export default {
     },
     isSenderSelf (message) {
       return message.sender == this.userSelf._id
+    },
+    diffMinutes (timeA, timeB) {
+      return Math.abs(Moment(timeA).diff(Moment(timeB), 'minutes'))
+    },
+    objectToArray (object) {
+      return Object.values(object)
+    },
+    scrollToBottom () {
+      console.log(this.chatContainer)
+      if (this.chatContainer) {
+        this.chatContainer.scrollTop = this.chatContainer.scrollHeight
+      }
     }
+  },
+  mounted () {
+    this.scrollToBottom()
   }
 }
 </script>
@@ -100,6 +132,20 @@ export default {
       margin-bottom: 5px;
     }
   }
+}
+
+.timetag-wrapper {
+  text-align: center;
+}
+
+.timetag {
+  display:inline-block;
+  color: #fff;
+  background-color: #999;
+  margin: 0 auto;
+  width: auto;
+  padding: 2px 6px;
+  border-radius: 4px;
 }
 
 </style>

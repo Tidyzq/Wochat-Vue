@@ -71,6 +71,7 @@ export default {
       }
 
       onFail = (err) => {
+        console.error(err)
         this.off('message:success', onSuccess)
         this.off('message:fail', onFail)
         reject(err)

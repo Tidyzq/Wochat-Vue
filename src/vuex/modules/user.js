@@ -1,5 +1,6 @@
 import auth from '../../api/auth'
 import io from '../../api/socket'
+import { refreshOnFailure } from './utils'
 import * as types from '../mutation-types'
 
 let saveStorage = (key, data) => {
@@ -74,16 +75,17 @@ export default {
         })
     },
     socketConnect ({ commit, state, dispatch }) {
-      return io.connect()
-        .then(() => {
-          return io.auth(state.accessToken)
-            .catch(() => {
-              return dispatch('userRefresh')
-            })
-            .then(() => {
+        return io.connect()
+          .then(() => {
+            console.log('socket connected')
+            return refreshOnFailure(() => {
+              console.log('socket auth')
               return io.auth(state.accessToken)
             })
-        })
+            .catch(() => {
+              console.log(err)
+            })
+          })
     }
   }
 }

@@ -25,7 +25,7 @@ export default {
   created () {
     if (! this.userState.accessToken) {
       console.log('jump to login')
-      return this.$router.push({ name: 'Login'})
+      return this.$router.push({ name: 'Login' })
     }
     this.$store.dispatch('socketConnect')
       .then(() => {
@@ -34,17 +34,14 @@ export default {
         this.$store.dispatch('receiveMessages')
       })
       .catch(() => {
+        console.log('auth fail')
         this.$store.dispatch('userLogout')
-        this.$router.push('login')
+        this.$router.push({ name: 'Login' })
       })
   },
   components: {
     WochatNavbar,
     ContactList
-  },
-  beforeDestroy () {
-    console.log('before destroy')
-      alert("This message was triggered from the onunload event")
   }
 }
 </script>

@@ -51,7 +51,7 @@ export default {
         })
         .then(() => {
           console.log('jump to hello')
-          this.$router.push('Hello')
+          this.$router.push({ name: 'Hello' })
         })
         .catch(() => {
           this.showAlert = true

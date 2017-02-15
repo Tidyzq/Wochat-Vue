@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import io from '../../api/socket'
 import userApi from '../../api/user'
+import { refreshOnFailure } from './utils'
 import * as types from '../mutation-types'
 
 const messageTypes = {
@@ -39,38 +40,37 @@ export default {
     },
   },
   actions: {
-    sendMessage ({ commit, state }, { to, message }) {
+    sendMessage ({ commit, state, dispatch }, { to, message }) {
       return io.message({
           receiver: to,
           content: message
         })
         .then((msg) => {
-          console.log(to, msg)
+          return dispatch('addMessage', { to: to, message: msg })
+        })
+    },
+    addMessage ({ commit, state, dispatch, rootState }, { to, message }) {
+      console.log(to, message)
+      switch (message.type) {
+        case messageTypes.text:
+        case messageTypes.image:
+          if (!rootState.contacts.contacts[to])
+            dispatch('getContact', to)
           commit(types.ADD_MESSAGE, {
             to: to,
-            message: msg
+            message: message
           })
-        })
+          break
+        case messageTypes.invitation:
+          commit(types.ADD_INVITATION, message)
+          break
+      }
     },
     receiveMessages ({ commit, state, dispatch, rootState }) {
       io.on('message', (messages) => {
-        console.log('receiveMessages', messages)
         messages.forEach((message) => {
           let to = message.sender
-          switch (message.type) {
-            case messageTypes.text:
-            case messageTypes.image:
-              if (!rootState.contacts.contacts[to])
-                dispatch('getContact', to)
-              commit(types.ADD_MESSAGE, {
-                to: to,
-                message: message
-              })
-              break
-            case messageTypes.invitation:
-              commit(types.ADD_INVITATION, message)
-              break
-          }
+          dispatch('addMessage', { to: to, message: message })
         })
         let acks = []
         messages.forEach((message) => {
@@ -81,15 +81,19 @@ export default {
       io.emit('receive')
     },
     sendInvitation ({ rootState }, { to, message }) {
-      return userApi.sendInvitation(to, message, rootState.user.accessToken)
+      return refreshOnFailure(() => {
+        return userApi.sendInvitation(to, message, rootState.user.accessToken)
+      })
     },
     acceptInvitation ({ commit, state, rootState }, id) {
       let invitation = state.invitations[id] || {}
-      return userApi.acceptInvitation(rootState.user.user._id, invitation.content, rootState.user.accessToken)
-        .then((body) => {
-          commit(types.REMOVE_INVITATION, id)
-          return body
+      return refreshOnFailure(() => {
+          return userApi.acceptInvitation(rootState.user.user._id, invitation.content, rootState.user.accessToken)
         })
+        .then((body) => {
+            commit(types.REMOVE_INVITATION, id)
+            return body
+          })
     }
   }
 }

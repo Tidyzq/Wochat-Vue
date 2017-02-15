@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import contacts from '../../api/contacts'
 import user from '../../api/user'
+import { refreshOnFailure } from './utils'
 import * as types from '../mutation-types'
 
 export default {
@@ -28,18 +29,35 @@ export default {
   },
   actions: {
     getContacts ({ commit, state, rootState }) {
-      return contacts.getContacts(rootState.user.user, rootState.user.accessToken)
-        .then((contacts) => {
-          commit(types.REFRESH_CONTACTS, contacts)
-        })
+      return refreshOnFailure(() => {
+        return contacts.getContacts(rootState.user.user, rootState.user.accessToken)
+          .then((contacts) => {
+            commit(types.REFRESH_CONTACTS, contacts)
+          })
+      })
     },
     getContact ({ commit, state, rootState }, id) {
-      return user.find(id, rootState.user.accessToken)
-        .then((contact) => {
-          commit(types.ADD_CONTACT, {
-            contact: contact
+      if (!state.contacts[id]) {
+        let promise = refreshOnFailure(() => {
+            return user.find(id, rootState.user.accessToken)
           })
+          .then((contact) => {
+            commit(types.ADD_CONTACT, {
+              contact: contact
+            })
+          })
+        commit(types.ADD_CONTACT, {
+          contact: {
+            _id: id,
+            promise: promise
+          }
         })
+        return promise
+      } else {
+        let contact = state.contacts[id]
+        if (contact.promise) return contact.promise
+        return Promise.resolve(contact)
+      }
     }
   }
 }
