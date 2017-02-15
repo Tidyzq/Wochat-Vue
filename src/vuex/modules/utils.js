@@ -5,7 +5,7 @@ export const refreshOnFailure = (method) => {
   if (typeof method == 'function') {
     return method()
       .catch((err) => {
-        console.log(err)
+        console.log('refreshOnFailure got error:', err)
         if (err.status == 401) {
           return Vue.store.dispatch('userRefresh')
             .then(() => {

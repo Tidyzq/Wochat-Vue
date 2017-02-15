@@ -99,7 +99,7 @@ export default {
     min-height: @chatbox-min-height;
     width: 100%;
     overflow: auto;
-    padding: 3px 8px;
+    padding: 8px 8px;
     border-radius: @chatbox-border-radius;
     word-wrap: break-word;
     overflow-wrap: break-word;

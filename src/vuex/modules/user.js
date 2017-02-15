@@ -64,6 +64,7 @@ export default {
       commit(types.CLEAR_MESSAGE)
     },
     userRefresh ({ commit, state, dispatch }) {
+      console.log('refreshing')
       return auth.refresh(state.refreshToken)
         .then(({ accessToken, refreshToken }) => {
           commit(types.UPDATE_ACCESS_TOKEN, accessToken)

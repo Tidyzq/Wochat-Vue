@@ -2,6 +2,7 @@
   .wochat-navbar-wrapper
     send-invitation-modal(:show='showSendInvitationModal', :userList='searchRst', v-on:toggle='showSendInvitationModal = arguments[0]')
     accept-invitation-modal(:show='showAcceptInvitationModal', v-on:toggle='showAcceptInvitationModal = arguments[0]')
+    user-config-modal(:show='showUserConfigModal', v-on:toggle='showUserConfigModal = arguments[0]')
     navbar(placement='static')
       a.navbar-brand(slot='brand' href='/') Wochat
       ul.nav.navbar-nav
@@ -19,7 +20,7 @@
             span.caret
           ul.dropdown-menu
             li
-              a(href='#' @click.prevent='') Config
+              a(href='#' @click.prevent='showUserConfigModal = true') Config
               a(href='#' @click.prevent='logout()') Logout
 </template>
 
@@ -27,6 +28,7 @@
 import Vue from 'vue'
 import Navbar from '../components/Navbar'
 import userApi from '../api/user'
+import UserConfigModal from '../components/UserConfigModal'
 import SendInvitationModal from '../components/SendInvitationModal'
 import AcceptInvitationModal from '../components/AcceptInvitationModal'
 
@@ -37,6 +39,7 @@ export default {
       search: '',
       showSendInvitationModal: false,
       showAcceptInvitationModal: false,
+      showUserConfigModal: false,
       searchRst: []
     }
   },
@@ -50,8 +53,9 @@ export default {
   },
   components: {
     Navbar,
+    UserConfigModal,
     SendInvitationModal,
-    AcceptInvitationModal
+    AcceptInvitationModal,
   },
   methods: {
     logout () {

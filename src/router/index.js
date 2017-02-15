@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Hello from 'views/Hello'
 import Login from 'views/Login'
 import Register from 'views/Register'
-import Chat from 'views/Chat'
+import ChatView from 'views/ChatView'
 
 Vue.use(Router)
 
@@ -19,9 +19,9 @@ export default new Router({
           path: ''
         },
         {
-          name: 'Chat',
+          name: 'ChatView',
           path: 'chat/:id',
-          component: Chat
+          component: ChatView
         }
       ]
     },

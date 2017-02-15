@@ -1,6 +1,7 @@
 <template lang='pug'>
   sidebar.chat-wrapper.no-padding(placement='right')
-    h3(v-if='contact') {{ contact.contact.username }}
+    .chat-header
+      p.contact-name(v-if='contact') {{ contact.contact.username }}
     .chats-wrapper
       .chats-container.container-fluid
         div(v-if='messages')
@@ -9,29 +10,33 @@
               .col-xs-12.col-sm-12
                 timetag(:time='message.time')
             .row
-              .col-xs-1.col-sm-1(:class='{"pull-right": isSenderSelf(message)}')
+              //- .col-xs-2.col-sm-2(:class='{"pull-right": isSenderSelf(message)}')
                 img.avatar-sm(:src='contacts[message.sender].contact.avatar')
-              .col-xs-7.col-sm-7(:class='{"pull-right": isSenderSelf(message)}')
+              img.avatar-sm.chat-avatar(:class='{"pull-right": isSenderSelf(message)}', :src='contacts[message.sender].contact.avatar')
+              .col-xs-7.col-sm-7.no-padding(:class='{"pull-right": isSenderSelf(message)}')
                 chatbox(:type='isSenderSelf(message) ? "success" : "info"',
                   :placement='isSenderSelf(message) ? "left" : "right"')
-                  | {{ message.content }}
+                  //- | {{ message.content }}
+                  chat(:text='message.content')
     .fixd-bottom
       .col-sm-12.no-padding
         textarea.form-control.no-radius(type='text' rows='3' v-model='inputMsg'
-          placeholder='Message' @keyup.enter='onInputEnterTriggered')
+          placeholder='Message' @keydown.enter='onInputEnterTriggered')
 </template>
 
 <script>
 import Sidebar from '../components/Sidebar'
 import Chatbox from '../components/Chatbox'
+import Chat from '../components/Chat'
 import Timetag from '../components/Timetag'
 import Moment from 'moment'
 
 export default {
-  name: 'chat',
+  name: 'chat-view',
   components: {
     Sidebar,
     Chatbox,
+    Chat,
     Timetag
   },
   data () {
@@ -65,6 +70,7 @@ export default {
   methods: {
     // 处理输入框的 enter 按下事件
     onInputEnterTriggered (e) {
+      e.preventDefault()
       if (!e.ctrlKey) {
         // 若 ctrl 未按下，则发送信息
         if (this.inputMsg) {
@@ -101,7 +107,9 @@ export default {
     }
   },
   mounted () {
-    this.scrollToBottom()
+    this.$nextTick(() => {
+      this.scrollToBottom()
+    })
   }
 }
 </script>
@@ -118,6 +126,23 @@ export default {
   bottom: 0;
 }
 
+.chat-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: @chat-header-height;
+  border-bottom-color: rgb(221, 221, 221);
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  .contact-name {
+    color: #333;
+    float: left;
+    margin: 8px 40px;
+    font-size: 24px;
+  }
+}
+
 .chats-wrapper {
   position: absolute;
   top: @chat-header-height;
@@ -130,6 +155,10 @@ export default {
     height: 100%;
     .chat-row {
       margin-bottom: 5px;
+    }
+    .chat-avatar {
+      margin: 0 20px;
+      float: left;
     }
   }
 }

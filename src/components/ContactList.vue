@@ -2,7 +2,7 @@
   sidebar.contact-list
     .list-group
       div(v-for='(contact, id) in contacts')
-        router-link.contact-item.list-group-item(:class='{ active: $route.params && $route.params.id == id }', :to='{ name: "Chat", params: { id: id }}')
+        router-link.contact-item.list-group-item(:class='{ active: $route.params && $route.params.id == id }', :to='{ name: "ChatView", params: { id: id }}')
           .row
             .col-xs-4.col-sm-4.col-lg-2
               img.avatar-sm(:src='contact.contact.avatar')
