@@ -25,10 +25,10 @@
 </template>
 
 <script>
-import Sidebar from '../components/Sidebar'
-import Chatbox from '../components/Chatbox'
-import Chat from '../components/Chat'
-import Timetag from '../components/Timetag'
+import Sidebar from '../components/mixins/Sidebar'
+import Chatbox from '../components/mixins/Chatbox'
+import Chat from '../components/mixins/Chat'
+import Timetag from '../components/mixins/Timetag'
 import Moment from 'moment'
 
 export default {

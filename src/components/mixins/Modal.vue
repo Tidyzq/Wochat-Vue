@@ -1,10 +1,9 @@
 <template lang='pug'>
-  div(role='dialog', v-bind:class="{\
-    'modal':true,\
-    'fade':effect === 'fade',\
-    'zoom':effect === 'zoom'\
-  }")
-    div(v-bind:class="{'modal-dialog':true,'modal-lg':large,'modal-sm':small}", role='document', v-bind:style='{width: optionalWidth}')
+  .modal(role='dialog', v-bind:class="{\
+      'fade' : effect === 'fade',\
+      'zoom' : effect === 'zoom'\
+    }")
+    .modal-dialog(v-bind:class="{'modal-lg':large,'modal-sm':small}", role='document', v-bind:style='{width: optionalWidth}')
       .modal-content
         slot(name='modal-header')
           .modal-header
@@ -22,7 +21,7 @@
 </template>
 
 <script>
-import $ from 'jquery'
+import $ from '../../utils/nodeList'
 
 export default {
   props: {
@@ -83,7 +82,9 @@ export default {
       if (val) {
         $(el).find('.modal-content').focus()
         el.style.display = 'block'
-        setTimeout(() => $(el).addClass('in'), 0)
+        setTimeout(() => {
+          $(el).addClass('in')
+        }, 0)
         $(body).addClass('modal-open')
         if (this.backdrop) {
           $(el).on('click', e => {
@@ -91,7 +92,6 @@ export default {
           })
         }
       } else {
-        body.style.paddingRight = null
         $(body).removeClass('modal-open')
         $(el).removeClass('in').on('transitionend', () => {
           $(el).off('click transitionend')

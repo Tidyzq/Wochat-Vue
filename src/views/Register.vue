@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import Alert from '../components/Alert'
+import Alert from '../components/mixins/Alert'
 import auth from '../api/auth'
 
 export default {

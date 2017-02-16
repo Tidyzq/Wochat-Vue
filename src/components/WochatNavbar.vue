@@ -15,19 +15,19 @@
           input.form-control(type='text' placeholder='Search' v-model='search')
           button.btn.btn-default(type='submit' @click.prevent='searchUser(search)') Submit
       ul.nav.navbar-nav.navbar-right
-        li.dropdown
-          a.dropdown-toggle(href='#' data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false") {{ userState.user.username }}
+        dropdown(:show='showUserDropdown', v-on:toggle='showUserDropdown = arguments[0]')
+          a.dropdown-toggle(slot='button' href='#' role='button' @click.prevent='showUserDropdown = !showUserDropdown') {{ userState.user.username }}
             span.caret
-          ul.dropdown-menu
-            li
-              a(href='#' @click.prevent='showUserConfigModal = true') Config
-              a(href='#' @click.prevent='logout()') Logout
+          li
+            a(href='#' @click.prevent='showUserConfigModal = true') Config
+            a(href='#' @click.prevent='logout()') Logout
 </template>
 
 <script>
 import Vue from 'vue'
-import Navbar from '../components/Navbar'
 import userApi from '../api/user'
+import Navbar from './mixins/Navbar'
+import Dropdown from './mixins/Dropdown'
 import UserConfigModal from '../components/UserConfigModal'
 import SendInvitationModal from '../components/SendInvitationModal'
 import AcceptInvitationModal from '../components/AcceptInvitationModal'
@@ -40,6 +40,7 @@ export default {
       showSendInvitationModal: false,
       showAcceptInvitationModal: false,
       showUserConfigModal: false,
+      showUserDropdown: false,
       searchRst: []
     }
   },
@@ -53,6 +54,7 @@ export default {
   },
   components: {
     Navbar,
+    Dropdown,
     UserConfigModal,
     SendInvitationModal,
     AcceptInvitationModal,

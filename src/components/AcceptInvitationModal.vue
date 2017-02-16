@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import Modal from '../components/Modal'
+import Modal from './mixins/Modal'
 
 export default {
   name: 'accept-invitation-modal',

@@ -5,7 +5,7 @@
       img.chat-emotion(v-if='token.type == "emotion"', :src='token.value')
 </template>
 <script>
-import emotionsApi from '../api/emotions'
+import emotionsApi from '../../api/emotions'
 
 export default {
   props: {

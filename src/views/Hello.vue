@@ -2,8 +2,8 @@
 .hello-wrapper
   wochat-navbar
   .hello-container
-    contact-list.col-xs-4.col-sm-4
-    router-view.col-xs-8.col-sm-8
+    contact-list.col-xs-4
+    router-view.col-xs-8
 </template>
 
 <script>

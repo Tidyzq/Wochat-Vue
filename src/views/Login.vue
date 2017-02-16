@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import Alert from '../components/Alert'
+import Alert from '../components/mixins/Alert'
 
 export default {
   name: 'login',

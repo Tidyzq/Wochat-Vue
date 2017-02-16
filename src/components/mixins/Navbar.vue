@@ -27,17 +27,14 @@ export default {
       default: ''
     }
   },
+  created () {
+    this._navbar = true
+  },
   data () {
     return {
       collapsed: true,
     }
-  },
-  /*methods: {
-    toggleCollapse (e) {
-      e && e.preventDefault()
-      this.collapsed = !this.collapsed
-    }
-  }*/
+  }
 }
 </script>
 <style lang='less'>

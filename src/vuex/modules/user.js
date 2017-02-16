@@ -83,9 +83,6 @@ export default {
               console.log('socket auth')
               return io.auth(state.accessToken)
             })
-            .catch(() => {
-              console.log(err)
-            })
           })
     }
   }

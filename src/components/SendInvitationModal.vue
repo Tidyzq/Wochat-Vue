@@ -21,9 +21,9 @@
 </template>
 
 <script>
-import Modal from '../components/Modal'
-import TabSet from '../components/TabSet'
-import Tab from '../components/Tab'
+import Modal from './mixins/Modal'
+import TabSet from './mixins/TabSet'
+import Tab from './mixins/Tab'
 
 export default {
   name: 'send-invitation-modal',
