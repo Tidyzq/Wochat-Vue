@@ -79,7 +79,7 @@ export default {
         return io.connect()
           .then(() => {
             console.log('socket connected')
-            return refreshOnFailure(() => {
+            return refreshOnFailure(dispatch)(() => {
               console.log('socket auth')
               return io.auth(state.accessToken)
             })

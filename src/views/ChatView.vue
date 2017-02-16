@@ -20,7 +20,7 @@
                   chat(:text='message.content')
     .fixd-bottom
       .col-sm-12.no-padding
-        textarea.form-control.no-radius(type='text' rows='3' v-model='inputMsg'
+        textarea.form-control.no-radius.chat-inputbox(type='text' rows='3' v-model='inputMsg'
           placeholder='Message' @keydown.enter='onInputEnterTriggered')
 </template>
 
@@ -161,6 +161,11 @@ export default {
       float: left;
     }
   }
+}
+
+.chat-inputbox {
+  height: @chat-inputbox-height;
+  resize: none;
 }
 
 .timetag-wrapper {

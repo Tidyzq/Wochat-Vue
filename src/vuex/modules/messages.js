@@ -80,14 +80,14 @@ export default {
       })
       io.emit('receive')
     },
-    sendInvitation ({ rootState }, { to, message }) {
-      return refreshOnFailure(() => {
+    sendInvitation ({ rootState, dispatch }, { to, message }) {
+      return refreshOnFailure(dispatch)(() => {
         return userApi.sendInvitation(to, message, rootState.user.accessToken)
       })
     },
-    acceptInvitation ({ commit, state, rootState }, id) {
+    acceptInvitation ({ commit, state, dispatch, rootState }, id) {
       let invitation = state.invitations[id] || {}
-      return refreshOnFailure(() => {
+      return refreshOnFailure(dispatch)(() => {
           return userApi.acceptInvitation(rootState.user.user._id, invitation.content, rootState.user.accessToken)
         })
         .then((body) => {

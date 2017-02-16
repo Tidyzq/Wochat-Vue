@@ -1,8 +1,9 @@
 <template lang='pug'>
   .chat-wrapper
     template(v-for='token in getTokens(text)')
-      .chat-text(v-if='token.type == "text"') {{ token.value }}
-      img.chat-emotion(v-if='token.type == "emotion"', :src='token.value')
+      .chat-newline(v-if='token.type == "newline"') {{ token.text }}
+      .chat-text(v-if='token.type == "text"') {{ token.text }}
+      img.chat-emotion(v-if='token.type == "emotion"', :src='token.src', :alt='token.text')
 </template>
 <script>
 import emotionsApi from '../../api/emotions'
@@ -21,13 +22,22 @@ export default {
       var src = text
       let emotions = emotionsApi.getAll()
       const rules = {
+        newline: /^\n/,
         emotion: /^\[[^\[\]]+\]/,
-        text: /^[\s\S]+?(?=\[|$)/
+        text: /^[\s\S]+?(?=\[|\n|$)/
       }
       var cap
       var count = 0
       while (src) {
-        console.log(src)
+        // newline
+        if (cap = rules.newline.exec(src)) {
+          src = src.substring(cap[0].length);
+          tokens.push({
+            type: 'newline',
+            text: cap[0]
+          })
+          continue
+        }
         // emotion
         if (cap = rules.emotion.exec(src)) {
           src = src.substring(cap[0].length);
@@ -35,12 +45,13 @@ export default {
           if (emotion) {
             tokens.push({
               type: 'emotion',
-              value: emotion.src
+              src: emotion.src,
+              text: emotion.value
             })
           } else {
             tokens.push({
               type: 'text',
-              value: cap[0]
+              text: cap[0]
             })
           }
           continue
@@ -50,7 +61,7 @@ export default {
           src = src.substring(cap[0].length);
           tokens.push({
             type: 'text',
-            value: cap[0]
+            text: cap[0]
           })
           continue
         }
@@ -65,8 +76,13 @@ export default {
 <style lang='less'>
 
 .chat-wrapper {
+  .chat-newline {
+    float: left;
+    clear: both;
+  }
   .chat-text {
     float: left;
+    line-height: 24px;
   }
   .chat-emotion {
     float: left;

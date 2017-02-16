@@ -28,17 +28,17 @@ export default {
     }
   },
   actions: {
-    getContacts ({ commit, state, rootState }) {
-      return refreshOnFailure(() => {
+    getContacts ({ commit, state, dispatch, rootState }) {
+      return refreshOnFailure(dispatch)(() => {
         return contacts.getContacts(rootState.user.user, rootState.user.accessToken)
           .then((contacts) => {
             commit(types.REFRESH_CONTACTS, contacts)
           })
       })
     },
-    getContact ({ commit, state, rootState }, id) {
+    getContact ({ commit, state, dispatch, rootState }, id) {
       if (!state.contacts[id]) {
-        let promise = refreshOnFailure(() => {
+        let promise = refreshOnFailure(dispatch)(() => {
             return user.find(id, rootState.user.accessToken)
           })
           .then((contact) => {

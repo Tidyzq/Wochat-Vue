@@ -1,5 +1,5 @@
 <template lang='pug'>
-  li(v-if="isLi", ref:dropdown, :class="classes")
+  li(v-if="isLi", ref='dropdown', :class="classes")
     slot(name="button")
       a.dropdown-toggle(role="button", :class="{disabled: disabled}", @click='_show = !_show')
         | {{ text }}
@@ -7,7 +7,7 @@
     slot(name="dropdown-menu")
       ul.dropdown-menu
         slot
-  div(v-else, ref:dropdown, :class="classes")
+  div(v-else, ref='dropdown', :class="classes")
     slot(name="before")
     slot(name="button")
       button.btn.dropdown-toggle(type="button", :class="'btn-' + type", @click='_show = !_show', :disabled="disabled")
@@ -81,7 +81,7 @@ export default {
     }
   },
   ready () {
-    const $el = $(this.$els.dropdown)
+    const $el = $(this.$refs.dropdown)
     $el.onBlur((e) => { this._show = false })
     $el.findChildren('a,button.dropdown-toggle').on('click', e => {
       e.preventDefault()
@@ -92,7 +92,7 @@ export default {
     $el.findChildren('ul').on('click', 'li>a', e => { this._show = false })
   },
   beforeDestroy () {
-    const $el = $(this.$els.dropdown)
+    const $el = $(this.$refs.dropdown)
     $el.offBlur()
     $el.findChildren('a,button').off()
     $el.findChildren('ul').off()
